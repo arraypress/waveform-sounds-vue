@@ -12,11 +12,7 @@ list played through one `WaveformPlayer` engine). Modelled on
 - `npm run build` — bundles to `dist/`. `prepublishOnly` runs it. `dist/` is gitignored.
 
 ## ⚠️ Before publishing: the core dependency
-The core wasn't on npm when this was built, so the devDependency is
-`"@arraypress/waveform-sounds": "file:../waveform-sounds"` (a symlink). **After
-the core's 0.1.0 is published, switch it to `"^0.1.0"` and `npm install`.**
-Then the `server.fs.allow` block in `vitest.config.ts` (it lets Vite read the
-symlinked core's `index.d.ts`) is no longer needed and can go.
+The core is an ordinary `^0.1.0` devDependency installed from npm. (Until 0.1.0 was published on 2026-10-07 it was a `file:../waveform-sounds` symlink, which needed a Vite `server.fs.allow` exception; both are gone.)
 
 ## The rule that matters: three edits per option
 `src/WaveformSounds.ts`. A new core option needs **all three**:

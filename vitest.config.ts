@@ -18,13 +18,4 @@ export default defineConfig({
 		environment: 'jsdom',
 		globals: false,
 	},
-	server: {
-		fs: {
-			/* Until the core is on npm it is a `file:../waveform-sounds`
-			 * symlink, which resolves outside this project — Vite's file
-			 * guard would refuse the `?raw` read of its `index.d.ts` in
-			 * test/option-surface.ts. Harmless once it's a real install. */
-			allow: ['.', '../waveform-sounds'],
-		},
-	},
 });
