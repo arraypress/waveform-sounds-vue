@@ -127,8 +127,10 @@ const RENDER_KEYS = [
 	'player',
 	'search',
 	'filters',
-	'sortable',
+	'sorts',
 	'loopToggle',
+	'showCount',
+	'menuSearch',
 	'pageSize',
 	'columns',
 	'maxTypeChips',
@@ -259,10 +261,15 @@ export const WaveformSounds = defineComponent({
 		search: { type: Boolean, default: undefined },
 		/** Which filter controls to offer: `'type'`, `'key'`, `'bpm'`. */
 		filters: { type: Array as PropType<SoundsFilterControl[]>, default: undefined },
-		/** Show the sort menu. */
-		sortable: { type: Boolean, default: undefined },
+		/** The sort orders the Sort menu offers; the first usable one is the
+		 *  starting order. `[]` (or one usable order) hides the menu. */
+		sorts: { type: Array as PropType<SoundsSort[]>, default: undefined },
 		/** Show the Loop toggle. */
 		loopToggle: { type: Boolean, default: undefined },
+		/** Show the "12 of 300 sounds" count. */
+		showCount: { type: Boolean, default: undefined },
+		/** A dropdown (type / key / sort) gets a search field past this many options. */
+		menuSearch: { type: Number, default: undefined },
 		/** Up to this many types show as chips; more become a menu. */
 		maxTypeChips: { type: Number, default: undefined },
 		/** Rows shown before "Show more" (0 = all). */
@@ -460,8 +467,10 @@ export const WaveformSounds = defineComponent({
 						props.player,
 						props.search,
 						props.filters,
-						props.sortable,
+						props.sorts,
 						props.loopToggle,
+						props.showCount,
+						props.menuSearch,
 						props.maxTypeChips,
 						props.pageSize,
 						props.columns,

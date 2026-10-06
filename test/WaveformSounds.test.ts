@@ -127,6 +127,26 @@ describe('WaveformSounds (Vue)', () => {
 		expect(wrapper.find('[data-ws-count]').text()).toBe('2 geluiden');
 	});
 
+	it('renders the sort menu from `sorts`, its first usable order selected', () => {
+		const wrapper = mount(WaveformSounds, { props: { sounds, sorts: ['bpm', 'title'] } });
+		const menu = wrapper.find('[data-ws-menu="sort"]');
+		expect(menu.exists()).toBe(true);
+		expect(menu.find('[data-ws-menu-value]').text()).toBe('BPM');
+		expect(menu.findAll('[role=option][data-value]').map((o) => o.attributes('data-value'))).toEqual(['bpm', 'title']);
+	});
+
+	it('`sorts: []` hides the sort menu; `showCount: false` hides the count', () => {
+		const wrapper = mount(WaveformSounds, { props: { sounds, sorts: [], showCount: false } });
+		expect(wrapper.find('[data-ws-menu="sort"]').exists()).toBe(false);
+		expect(wrapper.find('[data-ws-count]').exists()).toBe(false);
+	});
+
+	it('renders the key filter as a dropdown menu (no native <select>)', () => {
+		const wrapper = mount(WaveformSounds, { props: { sounds } });
+		expect(wrapper.find('[data-ws-menu="key"]').exists()).toBe(true);
+		expect(wrapper.find('select').exists()).toBe(false);
+	});
+
 	it('leaves the host empty for a manifest (the runtime fetches + renders)', () => {
 		const wrapper = mount(WaveformSounds, { props: { manifest: '/sounds.json' } });
 		expect(wrapper.element.innerHTML).toBe('');
@@ -152,6 +172,9 @@ describe('WaveformSounds (Vue)', () => {
 				sounds,
 				player: 'strip',
 				filters: ['type', 'bpm'],
+				sorts: ['title', 'bpm'],
+				showCount: false,
+				menuSearch: 12,
 				pageSize: 100,
 				columns: ['type', 'duration'],
 				waveformStyle: 'bars',
@@ -167,6 +190,9 @@ describe('WaveformSounds (Vue)', () => {
 			sounds,
 			player: 'strip',
 			filters: ['type', 'bpm'],
+			sorts: ['title', 'bpm'],
+			showCount: false,
+			menuSearch: 12,
 			pageSize: 100,
 			columns: ['type', 'duration'],
 			waveformStyle: 'bars',
@@ -182,16 +208,16 @@ describe('WaveformSounds (Vue)', () => {
 		mount(WaveformSounds, { props: { manifest: '/sounds.json' } });
 		await flushPromises();
 		const { opts } = instances[0];
-		for (const key of ['sounds', 'search', 'sortable', 'loop', 'arrowAudition', 'playerOptions', 'playerClass']) {
+		for (const key of ['sounds', 'search', 'sorts', 'showCount', 'loop', 'arrowAudition', 'playerOptions', 'playerClass']) {
 			expect(key in opts, key).toBe(false);
 		}
 		expect(opts.manifest).toBe('/sounds.json');
 	});
 
 	it('forwards explicit boolean props (including false)', async () => {
-		mount(WaveformSounds, { props: { sounds, search: false, arrowAudition: false, sortable: true } });
+		mount(WaveformSounds, { props: { sounds, search: false, arrowAudition: false, showCount: false, loopToggle: true } });
 		await flushPromises();
-		expect(instances[0].opts).toMatchObject({ search: false, arrowAudition: false, sortable: true });
+		expect(instances[0].opts).toMatchObject({ search: false, arrowAudition: false, showCount: false, loopToggle: true });
 	});
 
 	it('forwards playerClass by reference', async () => {

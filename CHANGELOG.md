@@ -18,7 +18,8 @@ Initial release.
   (constructed from `@arraypress/waveform-sounds/no-autoinit`, so importing
   it never scans the page for `[data-waveform-sounds]` markup).
 - Every `WaveformSoundsOptions` key as a typed runtime prop, forwarded through
-  an explicit allowlist. The props type (`WaveformSoundsProps`) derives from
+  an explicit allowlist — including `sorts` (the Sort menu's orders; `[]`
+  hides it), `showCount` and `menuSearch`. The props type (`WaveformSoundsProps`) derives from
   the core's hand-written `index.d.ts`; a drift test fails when a core option
   is neither forwarded nor listed as deliberately not forwarded, and checks
   the core's `index.d.ts` against its runtime `DEFAULT_OPTIONS`.
@@ -33,7 +34,9 @@ Initial release.
   browser's user activation.
 - Server rendering: with `sounds`, the host holds the core's own markup from
   `@arraypress/waveform-sounds/render`, on the server and the client alike,
-  and the runtime adopts it. Hydrates without mismatches (tested).
+  and the runtime adopts it (toolbar dropdowns included). Hydrates without
+  mismatches (tested). Set `--ws-surface` on the host for a correct first
+  server-rendered paint; the list is otherwise colour-agnostic.
 - Value-based rebuilds: a construction-prop change destroys and rebuilds the
   instance over freshly reset markup, but arrays and objects are compared
   serialised, so an equal inline literal from a re-rendering parent doesn't

@@ -132,6 +132,18 @@ describe('against the real runtime', () => {
 		expect(api().instance?.visible.map((s) => s.id)).toEqual(['kick', 'hat']);
 	});
 
+	it('setSort() through the ref updates the sort menu the wrapper rendered', async () => {
+		wrapper = mount(WaveformSounds, { props: { sounds, sorts: ['bpm', 'title'], playerClass: FakePlayer }, attachTo: document.body });
+		await ready();
+		const value = () => (wrapper!.element as HTMLElement).querySelector('[data-ws-menu="sort"] [data-ws-menu-value]')!.textContent;
+		expect(value()).toBe('BPM');
+		expect(api().instance?.sortBy).toBe('bpm'); // the first usable order is the starting one
+
+		api().setSort('title');
+		expect(value()).toBe('Name');
+		expect(api().instance?.visible.map((s) => s.id)).toEqual(['bass', 'hat', 'kick']);
+	});
+
 	it('`loop` is applied live to the running list', async () => {
 		wrapper = mount(WaveformSounds, { props: { sounds, playerClass: FakePlayer }, attachTo: document.body });
 		await ready();

@@ -43,8 +43,10 @@ Generate the manifest from a folder of previews with
 ## Props, emits, ref
 
 - **Props** — every `WaveformSoundsOptions` key: `sounds` or `manifest`,
-  `player` (`'inline'` | `'strip'`), `search`, `filters`, `sortable`,
-  `loopToggle`, `maxTypeChips`, `pageSize`, `columns`, `strings`,
+  `player` (`'inline'` | `'strip'`), `search`, `filters`, `sorts`
+  (`[]` = no sort menu; the first usable one is the starting order),
+  `loopToggle`, `showCount`, `menuSearch`, `maxTypeChips`, `pageSize`,
+  `columns`, `strings`,
   `waveformStyle`, `waveformColor`, `progressColor`, `barWidth`, `barGap`,
   `loop`, `autoAdvance`, `arrowAudition`, `playerOptions`, `playerClass`.
   A `sounds` array (even an empty one) wins over `manifest`.
@@ -62,6 +64,15 @@ parent don't count); `loop` is applied live.
 With `sounds`, the list's markup is rendered by the core's DOM-free renderer —
 on the server too (Nuxt, `vue/server-renderer`) — and the browser runtime
 adopts it instead of rebuilding. The runtime itself only loads on the client.
+
+## Theming
+
+Colour-agnostic by default: the list derives from `currentColor` and fits
+light and dark pages with no configuration — no accent required. Opt into a
+brand colour with `--ws-accent` / `--ws-on-accent` on the host. `--ws-surface`
+is the page background: the runtime detects it, but set it yourself when you
+server-render so the first paint is right, e.g.
+`<WaveformSounds :sounds="sounds" style="--ws-surface: #09090b" />`.
 
 ## Documentation
 

@@ -51,6 +51,7 @@ function onPlay(sound: Sound) {
 		player="strip"
 		:filters="['type', 'bpm']"
 		:columns="['bpm', 'key']"
+		:sorts="['bpm', 'title']"
 		:page-size="25"
 		auto-advance
 		@play="onPlay"
