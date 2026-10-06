@@ -42,7 +42,7 @@ import { WaveformSounds } from '../src';
 
 const sounds = [
 	{ url: '/a.mp3', title: 'Kick Loop', type: 'Drums', bpm: 120, key: 'Fmin', peaks: [0.2, 0.8, 0.5] },
-	{ url: '/b.mp3', title: 'Bass <Line>', type: 'Bass', bpm: 128, key: 'C', tags: ['sub', 'dark'] },
+	{ url: '/b.mp3', title: 'Bass <Line>', type: 'Bass', bpm: 128, key: 'C', tags: ['sub', 'dark'], download: '/free/bass.wav' },
 ];
 
 const app = () =>
@@ -63,6 +63,8 @@ describe('server rendering', () => {
 		expect(html).toMatch(/class="[^"]*\bwfp-host\b[^"]*\bmy-list\b[^"]*\bwaveform-sounds\b/);
 		expect(html).not.toContain('data-waveform-sounds');
 		expect(html).toContain('class="ws-cells"'); // core 7591952 row markup
+		// A per-sound download link, only on the row that has one.
+		expect(html.match(/class="ws-download" href="\/free\/bass.wav" download/g)).toHaveLength(1);
 		expect(html).toMatch(/ id="ws-v-0-/); // dropdown ids from useId(), not a hash of the sounds
 		expect(runtime.loaded).toBe(false);
 	});

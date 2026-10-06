@@ -88,6 +88,9 @@ describe('against the real runtime', () => {
 		expect(api().instance?.sounds.map((s) => s.id)).toEqual(['kick', 'bass', 'hat']);
 		expect(wrapper.element.querySelector('[data-ws-index]')).toBe(firstRow);
 		expect(wrapper.element.dataset.wsInitialized).toBe('true');
+		// Core 8d7db3b: with a player class available, the engine is built
+		// at ready (not on first play) — through the playerClass we passed.
+		expect(FakePlayer.instances).toHaveLength(1);
 	});
 
 	it('the exposed API drives the list, and playback emits with the Sound', async () => {

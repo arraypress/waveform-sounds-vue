@@ -244,6 +244,16 @@ describe('WaveformSounds (Vue)', () => {
 		expect(instances[0].opts).toMatchObject({ search: false, arrowAudition: false, showCount: false, loopToggle: true });
 	});
 
+	it('forwards urlState as a boolean (bare attribute) or a prefix string', async () => {
+		mount(WaveformSounds, { props: { sounds }, attrs: { 'url-state': '' } });
+		await flushPromises();
+		expect(instances[0].opts.urlState).toBe(true);
+
+		mount(WaveformSounds, { props: { sounds, urlState: 'loops' } });
+		await flushPromises();
+		expect(instances[1].opts.urlState).toBe('loops');
+	});
+
 	it('forwards playerClass by reference', async () => {
 		class FakePlayer {}
 		mount(WaveformSounds, { props: { sounds, playerClass: FakePlayer } });

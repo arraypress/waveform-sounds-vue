@@ -49,7 +49,10 @@ Generate the manifest from a folder of previews with
   `columns`, `strings`, `idPrefix` (defaults to a per-component `useId()`,
   identical on server and client),
   `waveformStyle`, `waveformColor`, `progressColor`, `barWidth`, `barGap`,
-  `loop`, `autoAdvance`, `arrowAudition`, `playerOptions`, `playerClass`.
+  `loop`, `autoAdvance`, `arrowAudition`, `urlState` (keep filters + sort
+  in the address; a string prefixes the parameter names), `playerOptions`,
+  `playerClass`. A sound can carry a `download` URL for a per-row download
+  link.
   A `sounds` array (even an empty one) wins over `manifest`.
 - **Emits** — `@ready`, `@play`, `@pause`, `@end` (sound, instance),
   `@filter` (visible sounds, instance), `@error` (error, instance).

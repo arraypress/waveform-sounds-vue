@@ -19,7 +19,8 @@ Initial release.
   it never scans the page for `[data-waveform-sounds]` markup).
 - Every `WaveformSoundsOptions` key as a typed runtime prop, forwarded through
   an explicit allowlist — including `sorts` (the Sort menu's orders; `[]`
-  hides it), `showCount`, `menuSearch` and `idPrefix`. When no `idPrefix`
+  hides it), `showCount`, `menuSearch`, `urlState` (`boolean | string`; a
+  bare `url-state` attribute is `true`) and `idPrefix`. When no `idPrefix`
   is given the wrapper passes one from Vue's `useId()`, so two lists of the
   same sounds on a page get distinct dropdown ids, and server and client
   render the same ones. The props type (`WaveformSoundsProps`) derives from
@@ -37,7 +38,8 @@ Initial release.
   browser's user activation.
 - Server rendering: with `sounds`, the host holds the core's own markup from
   `@arraypress/waveform-sounds/render`, on the server and the client alike,
-  and the runtime adopts it (toolbar dropdowns included). Hydrates without
+  and the runtime adopts it (toolbar dropdowns and per-sound `download`
+  links included). Hydrates without
   mismatches (tested). Set `--ws-surface` on the host for a correct first
   server-rendered paint; the list is otherwise colour-agnostic.
 - Value-based rebuilds: a construction-prop change destroys and rebuilds the

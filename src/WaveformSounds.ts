@@ -181,6 +181,7 @@ function buildOptions(p: Options): Options {
 		'loop',
 		'autoAdvance',
 		'arrowAudition',
+		'urlState',
 		/* Engine */
 		'playerOptions',
 		'playerClass',
@@ -301,6 +302,10 @@ export const WaveformSounds = defineComponent({
 		autoAdvance: { type: Boolean, default: undefined },
 		/** While a sound plays, ↑/↓ move to the next row AND play it. */
 		arrowAudition: { type: Boolean, default: undefined },
+		/** Keep the filters and sort in the address (`replaceState`); a string
+		 *  prefixes the parameter names. `Boolean` first, so a bare
+		 *  `url-state` attribute is `true`. */
+		urlState: { type: [Boolean, String] as PropType<boolean | string>, default: undefined },
 
 		// ── Engine ─────────────────────────────────────────────────────
 		/** Options for the engine `WaveformPlayer` (its callbacks included). */
@@ -500,6 +505,7 @@ export const WaveformSounds = defineComponent({
 						props.barGap,
 						props.autoAdvance,
 						props.arrowAudition,
+						props.urlState,
 						props.playerOptions,
 					]),
 				() => props.playerClass,
