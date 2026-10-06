@@ -38,7 +38,8 @@ import { WaveformSounds } from '@arraypress/waveform-sounds-vue';
 ```
 
 Generate the manifest from a folder of previews with
-`npx @arraypress/waveform-gen ./previews/*.mp3 --manifest ./public/sounds.json`.
+`npx @arraypress/waveform-gen ./public/previews/*.mp3 --manifest ./public/sounds.json --base-url /previews/`
+(`--base-url` is the folder's public URL; without it the URLs point at the site root).
 
 ## Props, emits, ref
 
