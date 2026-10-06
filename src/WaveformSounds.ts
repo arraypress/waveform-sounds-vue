@@ -410,7 +410,19 @@ export const WaveformSounds = defineComponent({
 					opts.onFilter = (v: Sound[], i: WaveformSoundsInstance) => emit('filter', v, i);
 					opts.onError = (e: unknown, i: WaveformSoundsInstance) => emit('error', e, i);
 
-					if (rebuild) target.innerHTML = markup.value;
+					if (rebuild) {
+						/* The runtime's destroy() restores neither adopted markup
+						 * nor classes it found already present — and the frozen
+						 * render class carries the FIRST `waveform-sounds--<player>`
+						 * modifier, so the runtime never owns it. Reset both:
+						 * clean markup to adopt, and no layout modifier, so the
+						 * new instance adds (and owns) the current one. A
+						 * modifier the consumer put in `class` is left alone. */
+						target.innerHTML = markup.value;
+						for (const modifier of ['waveform-sounds--inline', 'waveform-sounds--strip']) {
+							if (!appliedClasses.includes(modifier)) target.classList.remove(modifier);
+						}
+					}
 
 					try {
 						const created = new Ctor(target, opts);

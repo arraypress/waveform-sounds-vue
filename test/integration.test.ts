@@ -162,6 +162,28 @@ describe('against the real runtime', () => {
 		expect(wrapper.element.classList.contains('waveform-sounds--inline')).toBe(true);
 	});
 
+	it('a player change leaves exactly one layout modifier on the host', async () => {
+		// The host is server-rendered with `waveform-sounds--inline`, so the
+		// runtime never counts it as its own and destroy() leaves it; the
+		// wrapper must drop it before the rebuilt instance adds `--strip`.
+		wrapper = mount(WaveformSounds, { props: { sounds, playerClass: FakePlayer }, attachTo: document.body });
+		await ready();
+		const first = api().instance;
+
+		await wrapper.setProps({ player: 'strip' });
+		await ready(first);
+		const cls = (wrapper.element as HTMLElement).classList;
+		expect(cls.contains('waveform-sounds--strip')).toBe(true);
+		expect(cls.contains('waveform-sounds--inline')).toBe(false);
+		expect(cls.contains('waveform-sounds')).toBe(true);
+
+		const second = api().instance;
+		await wrapper.setProps({ player: 'inline' });
+		await ready(second);
+		expect(cls.contains('waveform-sounds--inline')).toBe(true);
+		expect(cls.contains('waveform-sounds--strip')).toBe(false);
+	});
+
 	it('a class-only change keeps the runtime classes on the host', async () => {
 		wrapper = mount(WaveformSounds, {
 			props: { sounds, playerClass: FakePlayer },

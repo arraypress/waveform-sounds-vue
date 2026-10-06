@@ -25,9 +25,10 @@ let holdReady = false;
 /**
  * Models the runtime's DOM contract (waveform-sounds 0.1.0): adopt a
  * server-rendered `[data-ws-list]` if the host has one, else render its
- * own markup (restored by `destroy()`); add `waveform-sounds` +
- * `waveform-sounds--<player>` to the host (`destroy()` removes only the
- * modifier).
+ * own markup (restored by `destroy()` — adopted markup is NOT restored);
+ * add `waveform-sounds` + `waveform-sounds--<player>` to the host, and
+ * have `destroy()` remove only the ones it added (not those already
+ * present). `ready` is a promise from construction.
  */
 class MockSounds {
 	el: HTMLElement;
@@ -65,11 +66,12 @@ class MockSounds {
 		const original = list ? null : el.innerHTML;
 		if (!list) el.innerHTML = '<ul data-ws-list><li data-ws-index="0" data-url="/fetched.mp3"></li></ul>';
 		const modifier = `waveform-sounds--${opts.player === 'strip' ? 'strip' : 'inline'}`;
-		el.classList.add('waveform-sounds', modifier);
+		const added = ['waveform-sounds', modifier].filter((c) => !el.classList.contains(c));
+		el.classList.add(...added);
 		this.destroy = vi.fn(() => {
 			lifecycle.push(`destroy:${n}`);
 			if (original != null) el.innerHTML = original;
-			el.classList.remove('waveform-sounds--inline', 'waveform-sounds--strip');
+			el.classList.remove(...added);
 		});
 		lifecycle.push(`construct:${n}`);
 		instances.push(this);
@@ -438,8 +440,19 @@ describe('WaveformSounds (Vue)', () => {
 		const el = wrapper.element as HTMLElement;
 		expect(instances).toHaveLength(2);
 		expect(el.classList.contains('waveform-sounds--strip')).toBe(true);
+		// Server-rendered, so the runtime never owned `--inline`: the wrapper
+		// has to drop it before the rebuild, or both modifiers stay.
 		expect(el.classList.contains('waveform-sounds--inline')).toBe(false);
 		expect(el.querySelector('[data-ws-engine]')?.classList.contains('ws-engine--strip')).toBe(true);
+	});
+
+	it("keeps a layout modifier the consumer put in `class` across a rebuild", async () => {
+		const wrapper = mount(WaveformSounds, { props: { sounds }, attrs: { class: 'waveform-sounds--inline' } });
+		await flushPromises();
+		await wrapper.setProps({ barWidth: 5 });
+		await flushPromises();
+		expect(instances).toHaveLength(2);
+		expect((wrapper.element as HTMLElement).classList.contains('waveform-sounds--inline')).toBe(true);
 	});
 
 	it('still forwards non-class attributes to the host', async () => {

@@ -35,12 +35,20 @@ is listed in `NOT_FORWARDED` with a reason). Callbacks (`on*`) become emits.
 - **Server markup.** With `sounds`, the host's `innerHTML` is the core's own
   `renderSounds()` output (DOM-free `/render` entry): it SSRs, and the runtime
   adopts it. A REBUILD resets `innerHTML` to that string before constructing —
-  otherwise the new instance adopts the old one's filtered/painted rows.
+  the core's `destroy()` does not restore adopted markup, so otherwise the new
+  instance adopts the old one's filtered/painted rows.
+- **The core builds on a microtask after its constructor returns** (since
+  52f5269); `instance.ready` exists immediately. Tests `await instance.ready`
+  before asserting on the DOM.
 - **No `data-waveform-sounds` on the host** — that's the global auto-init marker.
 - **Host `class` frozen at setup** (`inheritAttrs: false`, live class via
   `classList`) — same as playlist-vue, because the runtime owns
   `waveform-sounds` / `waveform-sounds--<player>` on the host. The frozen value
-  includes those so SSR markup is styled before hydration.
+  includes those so SSR markup is styled before hydration. Consequence: the
+  core's `destroy()` removes only classes IT added (core 52f5269), so it never
+  owns the server-rendered modifier — a rebuild strips `--inline`/`--strip`
+  (unless the consumer's own `class` has it) before constructing, or a
+  `player` change would leave both modifiers on the host.
 - **Rebuild key is serialised**, not identities: a parent passing an equal
   inline array/object must not rebuild (that would wipe filter + playback).
   `playerClass` is compared by identity alongside it.

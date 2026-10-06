@@ -44,7 +44,8 @@ Initial release.
   new one.
 - `class`, `style`, `id` and other attributes forward to the host; the base
   class `wfp-host` always applies, and a class-only change never strips the
-  runtime's own `waveform-sounds` / `waveform-sounds--<player>` classes.
+  runtime's own `waveform-sounds` / `waveform-sounds--<player>` classes. A
+  `player` change leaves exactly one layout modifier on the host.
 - Dual ESM + CJS build via `tsup` with `.d.ts`. Vue and both cores are peer
   dependencies.
 - Vitest suite (jsdom + `@vue/test-utils`): the component against a mocked
