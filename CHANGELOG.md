@@ -19,7 +19,10 @@ Initial release.
   it never scans the page for `[data-waveform-sounds]` markup).
 - Every `WaveformSoundsOptions` key as a typed runtime prop, forwarded through
   an explicit allowlist — including `sorts` (the Sort menu's orders; `[]`
-  hides it), `showCount` and `menuSearch`. The props type (`WaveformSoundsProps`) derives from
+  hides it), `showCount`, `menuSearch` and `idPrefix`. When no `idPrefix`
+  is given the wrapper passes one from Vue's `useId()`, so two lists of the
+  same sounds on a page get distinct dropdown ids, and server and client
+  render the same ones. The props type (`WaveformSoundsProps`) derives from
   the core's hand-written `index.d.ts`; a drift test fails when a core option
   is neither forwarded nor listed as deliberately not forwarded, and checks
   the core's `index.d.ts` against its runtime `DEFAULT_OPTIONS`.

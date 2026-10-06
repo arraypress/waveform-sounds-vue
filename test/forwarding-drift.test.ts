@@ -24,6 +24,16 @@ import { ALL_OPTIONS, isCallback } from './option-surface';
  *  every option the core has is a prop or an emit. */
 const NOT_FORWARDED: Record<string, string> = {};
 
+/**
+ * Known gaps in the CORE between its `index.d.ts` and its runtime
+ * `DEFAULT_OPTIONS` (reported upstream). The check below fails when one is
+ * fixed, so delete the entry then. These don't affect forwarding: the
+ * wrapper reads the surface from `index.d.ts`.
+ */
+const KNOWN_CORE_DRIFT: Record<string, string> = {
+	idPrefix: 'core 7591952 declares and reads it, but has no DEFAULT_OPTIONS entry',
+};
+
 /** Forwarded options a change applies to the live instance instead of
  *  rebuilding it, with the method that does it. */
 const LIVE: Record<string, string> = {
@@ -79,7 +89,14 @@ describe('forwarding drift', () => {
 		const actual = await vi.importActual<{ DEFAULT_OPTIONS: Record<string, unknown> }>(
 			'@arraypress/waveform-sounds/no-autoinit'
 		);
-		expect([...ALL_OPTIONS].sort()).toEqual(Object.keys(actual.DEFAULT_OPTIONS).sort());
+		const runtime = Object.keys(actual.DEFAULT_OPTIONS);
+		const typedOnly = ALL_OPTIONS.filter((key) => !runtime.includes(key)).sort();
+		const runtimeOnly = runtime.filter((key) => !ALL_OPTIONS.includes(key)).sort();
+		expect(runtimeOnly, 'core options missing from its index.d.ts').toEqual([]);
+		// Fails both ways: a new gap, and an entry the core has since fixed.
+		expect(typedOnly, 'core index.d.ts options missing from DEFAULT_OPTIONS').toEqual(
+			Object.keys(KNOWN_CORE_DRIFT).sort()
+		);
 	});
 
 	it('NOT_FORWARDED and LIVE list only real options (no stale entries)', () => {

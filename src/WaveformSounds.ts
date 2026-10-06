@@ -86,6 +86,7 @@ import {
 	onUpdated,
 	ref,
 	watch,
+	useId,
 	type PropType,
 } from 'vue';
 import { renderSounds } from '@arraypress/waveform-sounds/render';
@@ -135,6 +136,7 @@ const RENDER_KEYS = [
 	'columns',
 	'maxTypeChips',
 	'strings',
+	'idPrefix',
 ] as const;
 
 /**
@@ -278,6 +280,9 @@ export const WaveformSounds = defineComponent({
 		columns: { type: Array as PropType<SoundsColumn[]>, default: undefined },
 		/** UI strings, merged over the English defaults. */
 		strings: { type: Object as PropType<Partial<WaveformSoundsStrings>>, default: undefined },
+		/** Prefix for the dropdowns' element ids. Defaults to a `useId()`-based
+		 *  one, unique per component and identical on server and client. */
+		idPrefix: { type: String, default: undefined },
 
 		// ── Row waveform ───────────────────────────────────────────────
 		waveformStyle: {
@@ -314,7 +319,19 @@ export const WaveformSounds = defineComponent({
 	},
 	setup(props, { emit, expose, attrs }) {
 		const container = ref<HTMLDivElement | null>(null);
-		const p = props as unknown as Options;
+
+		/* The dropdowns' element ids. Left to the core, they would be the
+		 * host's `id` or else a hash of the sounds — so two lists of the same
+		 * sounds collide, and a manifest list (client-rendered) differs from
+		 * what the server would write. `useId()` is unique per component
+		 * instance and the same in SSR and hydration. Sanitised because early
+		 * 3.5 releases put a `:` in it. */
+		const autoIdPrefix = `ws-${useId()}`.replace(/[^\w-]/g, '-');
+		/** Props with `idPrefix` resolved, for the renderer and the runtime. */
+		const p = new Proxy(props as unknown as Options, {
+			get: (target, key) =>
+				key === 'idPrefix' ? (target.idPrefix ?? autoIdPrefix) : Reflect.get(target, key),
+		});
 
 		/* The core's markup for `sounds`, from its DOM-free renderer — the
 		 * same function on the server and the client, so hydration matches.
@@ -475,6 +492,7 @@ export const WaveformSounds = defineComponent({
 						props.pageSize,
 						props.columns,
 						props.strings,
+						props.idPrefix,
 						props.waveformStyle,
 						props.waveformColor,
 						props.progressColor,

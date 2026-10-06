@@ -40,6 +40,10 @@ is listed in `NOT_FORWARDED` with a reason). Callbacks (`on*`) become emits.
 - **The core builds on a microtask after its constructor returns** (since
   52f5269); `instance.ready` exists immediately. Tests `await instance.ready`
   before asserting on the DOM.
+- **`idPrefix` defaults to `ws-${useId()}`** (via a Proxy over props, so the
+  renderer and the runtime see the same value and reactivity stays per-key).
+  The core's own default is the host id or a hash of the sounds — identical
+  for two lists of the same sounds.
 - **No `data-waveform-sounds` on the host** — that's the global auto-init marker.
 - **Host `class` frozen at setup** (`inheritAttrs: false`, live class via
   `classList`) — same as playlist-vue, because the runtime owns

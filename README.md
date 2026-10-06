@@ -46,7 +46,8 @@ Generate the manifest from a folder of previews with
   `player` (`'inline'` | `'strip'`), `search`, `filters`, `sorts`
   (`[]` = no sort menu; the first usable one is the starting order),
   `loopToggle`, `showCount`, `menuSearch`, `maxTypeChips`, `pageSize`,
-  `columns`, `strings`,
+  `columns`, `strings`, `idPrefix` (defaults to a per-component `useId()`,
+  identical on server and client),
   `waveformStyle`, `waveformColor`, `progressColor`, `barWidth`, `barGap`,
   `loop`, `autoAdvance`, `arrowAudition`, `playerOptions`, `playerClass`.
   A `sounds` array (even an empty one) wins over `manifest`.

@@ -62,6 +62,8 @@ describe('server rendering', () => {
 		expect(html).toContain('Bass &lt;Line&gt;'); // escaped by the core's renderer
 		expect(html).toMatch(/class="[^"]*\bwfp-host\b[^"]*\bmy-list\b[^"]*\bwaveform-sounds\b/);
 		expect(html).not.toContain('data-waveform-sounds');
+		expect(html).toContain('class="ws-cells"'); // core 7591952 row markup
+		expect(html).toMatch(/ id="ws-v-0-/); // dropdown ids from useId(), not a hash of the sounds
 		expect(runtime.loaded).toBe(false);
 	});
 

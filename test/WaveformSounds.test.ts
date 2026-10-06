@@ -12,6 +12,7 @@
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
+import { h } from 'vue';
 
 /** Captures every constructed instance so assertions can inspect them. */
 const instances: MockSounds[] = [];
@@ -145,6 +146,29 @@ describe('WaveformSounds (Vue)', () => {
 		const wrapper = mount(WaveformSounds, { props: { sounds } });
 		expect(wrapper.find('[data-ws-menu="key"]').exists()).toBe(true);
 		expect(wrapper.find('select').exists()).toBe(false);
+	});
+
+	it('gives each instance its own dropdown ids by default (two lists of the same sounds)', async () => {
+		// One app (as on a real page): useId() is unique per app.
+		const page = mount({
+			render: () => h('div', [h(WaveformSounds, { sounds }), h(WaveformSounds, { sounds })]),
+		});
+		const [a, b] = page.findAllComponents(WaveformSounds);
+		const ids = (w: typeof a) => w.findAll('[id]').map((el) => el.attributes('id'));
+		expect(ids(a).length).toBeGreaterThan(0);
+		expect(ids(a).filter((id) => ids(b).includes(id))).toEqual([]);
+		await flushPromises();
+		// The runtime gets the same prefix the markup was rendered with.
+		const prefix = instances[0].opts.idPrefix as string;
+		expect(prefix).toMatch(/^ws-[\w-]+$/);
+		expect(ids(a).every((id) => id!.startsWith(prefix))).toBe(true);
+	});
+
+	it('an explicit idPrefix wins, in the markup and the runtime options', async () => {
+		const wrapper = mount(WaveformSounds, { props: { sounds, idPrefix: 'loops' } });
+		await flushPromises();
+		expect(instances[0].opts.idPrefix).toBe('loops');
+		expect(wrapper.findAll('[id]').every((el) => el.attributes('id')!.startsWith('loops'))).toBe(true);
 	});
 
 	it('leaves the host empty for a manifest (the runtime fetches + renders)', () => {
