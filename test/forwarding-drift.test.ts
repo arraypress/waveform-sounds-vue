@@ -30,9 +30,7 @@ const NOT_FORWARDED: Record<string, string> = {};
  * fixed, so delete the entry then. These don't affect forwarding: the
  * wrapper reads the surface from `index.d.ts`.
  */
-const KNOWN_CORE_DRIFT: Record<string, string> = {
-	idPrefix: 'core 7591952 declares and reads it, but has no DEFAULT_OPTIONS entry',
-};
+const KNOWN_CORE_DRIFT: Record<string, string> = {};
 
 /** Forwarded options a change applies to the live instance instead of
  *  rebuilding it, with the method that does it. */
