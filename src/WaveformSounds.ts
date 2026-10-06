@@ -487,10 +487,8 @@ export const WaveformSounds = defineComponent({
 		/**
 		 * Run `fn` against the live instance: now if it is ready, after
 		 * `ready` (in call order) while it is still building, never if there
-		 * is none. Calls made while building would otherwise hit an instance
-		 * with no sounds yet (`play()` is silently dropped) or no controls
-		 * (a `setFilter()` filters the rows but leaves the search box and
-		 * chips showing the old filter).
+		 * is none. A call made while building would otherwise hit an instance
+		 * with no sounds yet — `play()` is silently dropped.
 		 */
 		function call(fn: (i: SoundsInstance) => void) {
 			const inst = instance;

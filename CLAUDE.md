@@ -55,10 +55,10 @@ is listed in `NOT_FORWARDED` with a reason). Callbacks (`on*`) become emits.
 - **`playerOptions` callbacks are trampolines** to the latest prop value (the
   core captures `playerOptions` when it creates the engine on first play).
 - **Exposed calls wait for `ready`** while the instance builds, then go
-  synchronous (keeps user activation for `play()`). Works around core gaps:
-  pre-ready `play()` is dropped and pre-ready `setFilter()`/`setSort()` leave
-  the controls out of sync (core gaps, not yet fixed there — remove the
-  queueing only once the core handles pre-ready calls itself).
+  synchronous (keeps user activation for `play()`). Needed because a pre-ready
+  `play()` finds no sounds and is silently dropped. (Pre-ready `setFilter()` /
+  `setSort()` used to leave the controls out of sync; the core syncs them in
+  `_init` since 52f5269, but queuing keeps every method's behaviour uniform.)
 - **The engine isn't imported here** — same as playlist-vue: the consumer
   imports `@arraypress/waveform-player` (registers `window.WaveformPlayer`) or
   passes `playerClass`. Dynamically importing `@arraypress/waveform-player/no-autoinit`
