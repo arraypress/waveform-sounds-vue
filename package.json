@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@arraypress/waveform-player": "^1.29.1",
-    "@arraypress/waveform-sounds": "file:../waveform-sounds",
+    "@arraypress/waveform-sounds": "^0.1.0",
     "@vue/test-utils": "^2.4.11",
     "jsdom": "^30.0.1",
     "tsup": "^8.5.1",
