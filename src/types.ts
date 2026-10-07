@@ -43,6 +43,7 @@ export type {
 	SoundsSort,
 	SoundsLayout,
 	SoundsFilterControl,
+	SoundsLoopFilter,
 	SoundsColumn,
 	WaveformSoundsOptions,
 	WaveformSoundsStrings,
