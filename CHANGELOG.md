@@ -8,6 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] — 2026-10-07
+
+### Changed
+
+- Accepts `@arraypress/waveform-sounds` 0.3.0 (peer `^0.2.0 || ^0.3.0`): the
+  BPM range menu, and Loop starting on for a list that marks loops. Nothing
+  to change here — `loop` is still forwarded only when you set it, so the
+  core's new default (follow the data) applies.
+
 ## [0.2.0] — 2026-10-07
 
 ### Changed

@@ -1,6 +1,6 @@
 {
   "name": "@arraypress/waveform-sounds-vue",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Vue 3 component wrapper for @arraypress/waveform-sounds — a searchable, filterable sound list with typed props for every option, lifecycle emits, an exposed imperative API, and server-rendered markup the runtime adopts.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -59,7 +59,7 @@
   "sideEffects": false,
   "peerDependencies": {
     "@arraypress/waveform-player": "^1.24.5",
-    "@arraypress/waveform-sounds": "^0.2.0",
+    "@arraypress/waveform-sounds": "^0.2.0 || ^0.3.0",
     "vue": "^3.5.0"
   },
   "scripts": {

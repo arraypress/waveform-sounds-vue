@@ -11,10 +11,14 @@ import { describe, it, expect } from 'vitest';
 import pkg from '../package.json';
 
 /** The lowest version a `^x.y.z` range admits, as comparable numbers. */
+/** The lowest version a range accepts: `^x.y.z`, or a `||` union of them. */
 const floor = (range: string): number[] => {
-	const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(range);
-	if (!m) throw new Error(`expected a ^x.y.z range, got ${range}`);
-	return m.slice(1).map(Number);
+	const parts = range.split('||').map((part) => {
+		const m = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(part.trim());
+		if (!m) throw new Error(`expected ^x.y.z ranges, got ${range}`);
+		return m.slice(1).map(Number);
+	});
+	return parts.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])[0];
 };
 const atLeast = (range: string, min: string): boolean => {
 	const [a, b] = [floor(range), floor(`^${min}`)];
