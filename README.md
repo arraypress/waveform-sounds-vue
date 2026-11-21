@@ -1,3 +1,7 @@
+> [!IMPORTANT]
+> **Replaced by [`@arraypress/waveform-vue`](https://www.npmjs.com/package/@arraypress/waveform-vue) 2.0.** Import from `@arraypress/waveform-vue/sounds` instead — one package per framework, with a sub-path per component ([repo](https://github.com/WaveformPlayer/vue), [migration guide](https://docs.waveformplayer.com/getting-started/migrating-from-1x/)).
+> This repository is archived and the npm package is deprecated; its 1.x releases keep working.
+
 <div align="center">
 
 # Waveform Sounds for Vue
