@@ -20,7 +20,7 @@
  * `class`, `style`, and `id` are intentionally NOT props: they are
  * forwarded to the host element.
  *
- * @see {@link https://github.com/arraypress/waveform-sounds} — core library
+ * @see {@link https://github.com/WaveformPlayer/waveform-sounds} — core library
  */
 import type {
 	Sound,
